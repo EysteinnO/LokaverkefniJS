@@ -48,12 +48,13 @@ function initMap() {
 
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 65.124, lng: -16.288},
+            center: {lat: 64.128288, lng: -21.827774},
             zoom: 10,
             mapTypeId: 'terrain'
         });
 
-        for (var depths in earthquakeInfo) {
+        for (var key in earthquakeInfo) {
+            //Circle
             var quakeCircle = new google.maps.Circle({
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
@@ -62,33 +63,36 @@ function initMap() {
                 fillOpacity: 0.35,
                 map: map,
                 center: {
-                    lat: earthquakeInfo[depths].xcoordinate,
-                    lng: earthquakeInfo[depths].ycoordinate
+                    lat: earthquakeInfo[key].xcoordinate,
+                    lng: earthquakeInfo[key].ycoordinate
                 },
-                radius: Math.sqrt(earthquakeInfo[depths].earthquakeDepth) * 1000
+                radius: Math.sqrt(earthquakeInfo[key].earthquakeDepth) * 1000
             });
-            //console.log(earthquakeLocX);
+
+            //Info box
+
+            var infowindow = new google.maps.InfoWindow({
+                content: earthquakeInfo[key].location
+            });
+
+            var marker = new google.maps.Marker({
+                position: {
+                    lat: earthquakeInfo[key].xcoordinate,
+                    lng: earthquakeInfo[key].ycoordinate
+                },
+                map: map,
+                title: 'Test'
+            });
+            marker.addListener('click', function() {
+                infowindow.open(earthquakeInfo[key].location, marker);
+            });
+
         }
 
-        var infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
 
-        service.getDetails({
-            placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4'
-        }, function (place, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: place.geometry.location
-                });
-                google.maps.event.addListener(marker, 'click', function () {
-                    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-                        'Place ID: ' + place.place_id + '<br>' +
-                        place.formatted_address + '</div>');
-                    infowindow.open(map, this);
-                });
-            }
-        });
+
+
+
 
     });
 }
