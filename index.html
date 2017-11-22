@@ -17,14 +17,18 @@
     <div class="jumbotron">
         <h1>Jarðskjálftar á Íslandi</h1>
 
-<div id="map"></div>
+        <div id="map"></div>
     </div>
-</div>
+    <h3>Range</h3>
+    <div id="slidecontainer">
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    </div>
+
 </main>
 <script src="jquery.js"></script>
 <script src="js.js"></script>
 <script async defer
-                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg48tsWmV9MDve4Vak1NiEEtaogTrtXQI&libraries=places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg48tsWmV9MDve4Vak1NiEEtaogTrtXQI&libraries=places&callback=initMap">
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
