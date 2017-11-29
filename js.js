@@ -1,18 +1,4 @@
 "use strict";
-
-//Slider
-
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-//output.innerHTML = slider.value; // Display the default slider value
-
-// Update the current slider value (each time you drag the slider handle)
-/*
-slider.oninput = function() {
-    output.innerHTML = this.value;
-}
-*/
-
 function initMap() {
 
     var jasonUrl = "http://apis.is/earthquake/is";
@@ -44,15 +30,14 @@ function initMap() {
             var locDescript = earthquakeInfo[i].location;
         }
 
-        //console.log(earthquakeInfo);
-
-
+        //Map
         var map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 64.128288, lng: -21.827774},
             zoom: 10,
             mapTypeId: 'terrain'
         });
 
+        //Circles created
         for (var key in earthquakeInfo) {
             //Circle
             var quakeCircle = new google.maps.Circle({
@@ -70,7 +55,6 @@ function initMap() {
             });
 
             //Info box
-
             var infowindow = new google.maps.InfoWindow({
                 content: earthquakeInfo[key].location
             });
@@ -81,13 +65,40 @@ function initMap() {
                     lng: earthquakeInfo[key].ycoordinate
                 },
                 map: map,
-                title: 'Test'
+                title: 'Info'
             });
             marker.addListener('click', function() {
                 infowindow.open(earthquakeInfo[key].location, marker);
             });
 
+            console.log(earthquakeInfo[key].location);
+
         }
+
+        //Slider
+
+        function update(min, max) {           // Update the table content
+            rows.forEach(function(row) {        // For each row in the rows array
+                if (row.person.rate >= min && row.person.rate <= max) { // If in range
+                    row.$element.show();            // Show the row
+                } else {                          // Otherwise
+                    row.$element.hide();            // Hide the row
+                }
+            });
+        }
+
+        function init() {                     // Tasks when script first runs
+            $('#slider').noUiSlider({           // Set up the slide control
+                range: [0, 150], start: [65, 90], handles: 2, margin: 20, connect: true,
+                serialization: {to: [$min, $max],resolution: 1}
+            }).change(function() { update($min.val(), $max.val()); });
+            makeRows();                           // Create table rows and rows array
+            appendRows();                         // Add the rows to the table
+            update($min.val(), $max.val());     // Update table to show matches
+        }
+
+
+
 
 
 

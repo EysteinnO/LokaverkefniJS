@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
           integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="jquery.nouislider.css" type="text/css"/>
 
     <title>Title</title>
 </head>
@@ -20,12 +21,15 @@
         <div id="map"></div>
     </div>
     <h3>Range</h3>
-    <div id="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-    </div>
+    <div id="price-range">
+        Min: <input type="number" id="value-min" />
+        Max: <input type="number" id="value-max" />
+        <div id="slider"></div>
 
 </main>
 <script src="jquery.js"></script>
+<script src="jquery.nouislider.js"></script>
+<script src="sliderdemo.js"></script>
 <script src="js.js"></script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg48tsWmV9MDve4Vak1NiEEtaogTrtXQI&libraries=places&callback=initMap">
