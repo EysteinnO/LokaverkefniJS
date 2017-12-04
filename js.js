@@ -1,41 +1,33 @@
 "use strict";
+
 function initMap() {
 
-    var jasonUrl = "http://apis.is/earthquake/is";
+    var jasonUrl = "http://apis.is/earthquake/is"; //Json string
     $.getJSON(jasonUrl, function (data) {
-        var earthquakeInfo = [];
+        var earthquakeInfo = []; //Array init
 
-
+        console.log(earthquakeInfo); //Testing purposes
         console.log(data);
 
-        for (var i = 0; i < data.results.length; i++) {
-            earthquakeInfo.push({
+        for (var i = 0; i < data.results.length; i++) { //Loop through json
+            earthquakeInfo.push({ //Initializing callable array elements
                 earthquakeDepth: data.results[i].depth,
-                time: data.results[i].timestamp,
+                timeStamp: data.results[i].timestamp,
                 xcoordinate: data.results[i].latitude,
                 ycoordinate: data.results[i].longitude,
                 earthquakeSize: data.results[i].size,
                 location: data.results[i].humanReadableLocation
             });
 
-            //Time of earthquakes
-            var earthquakeTimestamp = earthquakeInfo[i].time;
-
-            //EarthquakeDepth
-            var earthquakeDepth = earthquakeInfo[i].depth;
-
-            //EarthquakeSize
-            var earthquakeSize = earthquakeInfo[i].size;
-            //Location description
-            var locDescript = earthquakeInfo[i].location;
         }
 
         //Map
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 64.128288, lng: -21.827774},
-            zoom: 10,
+            center: {lat: 65, lng: -18},
+            zoom: 6,
             mapTypeId: 'terrain'
         });
+
 
         //Circles created
         for (var key in earthquakeInfo) {
@@ -51,14 +43,16 @@ function initMap() {
                     lat: earthquakeInfo[key].xcoordinate,
                     lng: earthquakeInfo[key].ycoordinate
                 },
-                radius: Math.sqrt(earthquakeInfo[key].earthquakeDepth) * 1000
+                radius: Math.sqrt(earthquakeInfo[key].earthquakeDepth) * 1500
             });
+
 
             //Info box
             var infowindow = new google.maps.InfoWindow({
-                content: earthquakeInfo[key].location
+                content: '<p>Upplýsingar um skjálfta.</p><br><p>Staðsetning: ' + earthquakeInfo[key].location + '</p>' + '<p>Stærð: ' + earthquakeInfo[key].earthquakeSize + ' á Richter</p>' + '<p>Dýpt: ' + earthquakeInfo[key].earthquakeDepth + 'KM</p>' + '</p>' + '<p>Tími: ' + earthquakeInfo[key].timeStamp + '</p>' + '<p> X ás: ' + earthquakeInfo[key].xcoordinate + '</p>' + '<p>Y ás: ' + earthquakeInfo[key].ycoordinate + '</p>'
             });
-
+            infowindow.close();
+            //Markers created
             var marker = new google.maps.Marker({
                 position: {
                     lat: earthquakeInfo[key].xcoordinate,
@@ -67,44 +61,42 @@ function initMap() {
                 map: map,
                 title: 'Info'
             });
-            marker.addListener('click', function() {
-                infowindow.open(earthquakeInfo[key].location, marker);
-            });
 
-            console.log(earthquakeInfo[key].location);
-
-        }
-
-        //Slider
-
-        function update(min, max) {           // Update the table content
-            rows.forEach(function(row) {        // For each row in the rows array
-                if (row.person.rate >= min && row.person.rate <= max) { // If in range
-                    row.$element.show();            // Show the row
-                } else {                          // Otherwise
-                    row.$element.hide();            // Hide the row
+            //Listener for info windows
+            google.maps.event.addListener(marker, 'click', (function (marker, infowindow) {
+                if (!infowindow) infowindow.close();
+                else  {
+                    return function () {
+                        infowindow.open(map, marker, this);
+                    };
                 }
-            });
+            })(marker, infowindow, this));
+
+
         }
 
+        //Slider control - unfinished.
+        var $min = $('#value-min');
+        var $max = $('#value-max');
+
+        function update(min, max) {
+            if (earthquakeInfo[key].earthquakeDepth >= min && earthquakeInfo[key].earthquakeDepth <= max && quakeCircle) { // If in range
+                quakeCircle.setMap(null);
+            } else {
+
+            }
+        }
+        //Slider init
         function init() {                     // Tasks when script first runs
             $('#slider').noUiSlider({           // Set up the slide control
-                range: [0, 150], start: [65, 90], handles: 2, margin: 20, connect: true,
-                serialization: {to: [$min, $max],resolution: 1}
-            }).change(function() { update($min.val(), $max.val()); });
-            makeRows();                           // Create table rows and rows array
-            appendRows();                         // Add the rows to the table
+                range: [0.0, 9.0], start: [3.0, 9.0], min: 0.0, max: 9.0, step: 0.1, handles: 2, margin: 20, connect: true,
+                serialization: {to: [$min, $max], resolution: 1}
+            }).change(function () {
+                update($min.val(), $max.val());
+            });
             update($min.val(), $max.val());     // Update table to show matches
         }
-
-
-
-
-
-
-
-
-
+        $(init);
     });
 }
 

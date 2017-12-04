@@ -8,6 +8,10 @@
 
 }
 
+.jumbotron{
+    padding: 1rem 1rem;
+}
+
 
 h3{
     text-align: center;
@@ -84,4 +88,38 @@ input:focus {
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
+
+table {
+    margin: 0 auto;
+    width: 780px;}
+table#rates	{width: 380px;}
+th, td {
+    border-radius: 3px;
+    color: #333;
+    padding: 7px 10px 5px 10px;
+    min-width: 9em;
+    text-align: left;}
+th {
+    background-color: #d7d7d7;
+    font-weight: bold;
+    text-transform: uppercase;}
+td {
+    background-color: #fff;}
+table.sortable th:hover {
+    cursor: pointer;}
+th.ascending, th.descending, table.sortable th:hover {
+    background-color: #00cccc;
+    color: #fff;}
+
+/* Arrows for table sorting */
+th.ascending:after {
+    font-size: 60%;
+    content: '\25B2';
+    float: left;
+    padding: 4px 5px 0 0;}
+th.descending:after {
+    font-size: 60%;
+    content: '\25BC';
+    float: left;
+    padding: 4px 5px 0 0;}
 
